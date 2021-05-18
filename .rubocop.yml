@@ -1,0 +1,20 @@
+require:
+  - rubocop-performance
+  - rubocop-rails
+
+AllCops:
+  Exclude:
+    - "db/schema.rb"
+    - "bin/*"
+    - "vendor/**/*"
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+  Exclude:
+    - "config/application.rb"
+
+Style/Documentation:
+  Enabled: false
