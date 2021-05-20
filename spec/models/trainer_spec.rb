@@ -4,12 +4,14 @@
 #
 # Table name: trainers
 #
-#  id         :integer          not null, primary key
-#  first_name :string
-#  last_name  :string
-#  expertise  :integer
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id              :integer          not null, primary key
+#  first_name      :string
+#  last_name       :string
+#  email           :string           not null
+#  password_digest :string           not null
+#  expertise       :integer
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
 #
 require "rails_helper"
 
