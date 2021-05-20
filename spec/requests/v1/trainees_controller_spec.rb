@@ -7,7 +7,9 @@ RSpec.describe "v1/trainees" do
 
   describe "POST /login" do
     let(:path) { "/v1/trainees/login" }
-    let(:params) { { email: trainee.email } }
+    let(:params) { { email: email, password: password } }
+    let(:email) { trainee.email }
+    let(:password) { "secret" }
     let(:do_post) { post(path, params: params) }
 
     it "returns trainee object and token" do
@@ -21,7 +23,18 @@ RSpec.describe "v1/trainees" do
     end
 
     context "when no matching email" do
-      let(:params) { { email: "johndoe@missing.com" } }
+      let(:email) { "johndoe@missing.com" }
+
+      it "returns unauthorized" do
+        do_post
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when incorrect password" do
+      let(:password) { "wrong" }
+
       it "returns unauthorized" do
         do_post
 

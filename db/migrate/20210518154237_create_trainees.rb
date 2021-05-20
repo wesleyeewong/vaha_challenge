@@ -6,6 +6,7 @@ class CreateTrainees < ActiveRecord::Migration[6.1]
       t.string :first_name
       t.string :last_name
       t.string :email, null: false, unique: true
+      t.string :password_digest, null: false
 
       t.timestamps
     end
