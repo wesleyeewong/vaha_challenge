@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_18_154621) do
+ActiveRecord::Schema.define(version: 2021_05_21_213834) do
+
+  create_table "personal_classes", force: :cascade do |t|
+    t.integer "trainer_id", null: false
+    t.integer "trainee_id", null: false
+    t.datetime "started_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["trainee_id"], name: "index_personal_classes_on_trainee_id"
+    t.index ["trainer_id"], name: "index_personal_classes_on_trainer_id"
+  end
 
   create_table "trainees", force: :cascade do |t|
     t.string "first_name"
@@ -31,4 +41,6 @@ ActiveRecord::Schema.define(version: 2021_05_18_154621) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "personal_classes", "trainees"
+  add_foreign_key "personal_classes", "trainers"
 end
