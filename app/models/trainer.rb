@@ -20,5 +20,5 @@ class Trainer < User
     fitness: 3
   }.freeze
 
-  enum exertise: EXPERTISE
+  enum expertise: EXPERTISE
 end

@@ -32,10 +32,10 @@ class ApplicationController < ActionController::API
   end
 
   def sign_in
-    @trainee = Trainee.find_by(trainee_id)
+    @trainee = Trainee.find_by(id: trainee_id)
   end
 
   def authenticate_user!
-    trainee_id && sign_in(trainee_id) || head(:unauthorized)
+    trainee_id && sign_in || head(:unauthorized)
   end
 end
