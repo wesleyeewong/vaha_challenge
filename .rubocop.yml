@@ -18,3 +18,21 @@ Style/ClassAndModuleChildren:
 
 Style/Documentation:
   Enabled: false
+
+Layout/LineLength:
+  Max: 120
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false

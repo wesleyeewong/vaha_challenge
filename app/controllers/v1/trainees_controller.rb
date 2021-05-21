@@ -6,9 +6,10 @@ class V1::TraineesController < ApplicationController
   def login
     @trainee = Trainee.find_by(email: trainee_params[:email])
 
-    if @trainee && @trainee.authenticate(trainee_params[:password])
+    if @trainee&.authenticate(trainee_params[:password])
       token = encode({ trainee_id: @trainee.id })
       trainee = V1::TraineePresenter.new(@trainee)
+
       render json: { trainee: trainee.to_h, token: token }
     else
       head(:unauthorized)
