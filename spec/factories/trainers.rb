@@ -13,15 +13,12 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
-class Trainer < User
-  EXPERTISE = {
-    yoga: 1,
-    strength: 2,
-    fitness: 3
-  }.freeze
-
-  enum expertise: EXPERTISE
-
-  has_many :personal_classes, dependent: :destroy
-  has_many :trainees, through: :personal_classes
+FactoryBot.define do
+  factory :trainer do
+    first_name { "Nama" }
+    last_name { "Ste" }
+    sequence(:email) { |n| "nama.ste#{n}@yoga.com" }
+    password { "secret" }
+    expertise { "yoga" }
+  end
 end

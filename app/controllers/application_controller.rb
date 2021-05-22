@@ -18,11 +18,12 @@ class ApplicationController < ActionController::API
   def decoded_token
     @decoded_token ||=
       if auth_header
-        token = auth_header.split(" ")[1]
+        token = auth_header.split[1]
 
         begin
           JWT.decode(token, nil, false)
         rescue JWT::DecodeError
+          head(:unauthorized)
         end
       end
   end
@@ -32,7 +33,7 @@ class ApplicationController < ActionController::API
   end
 
   def sign_in
-    @trainee = Trainee.find_by(id: trainee_id)
+    @trainee = Trainee.find(trainee_id)
   end
 
   def authenticate_user!
