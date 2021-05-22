@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   scope :v1, module: "v1", defautls: { format: "json" } do
     post "/trainees/login", to: "trainees#login"
 
-    resources :trainers, only: %i[index show]
+    resources :trainers, only: %i[index show] do
+      resources :personal_classes, only: %i[create destroy]
+    end
   end
 end

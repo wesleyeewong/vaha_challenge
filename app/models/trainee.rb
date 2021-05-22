@@ -13,4 +13,10 @@
 #  updated_at      :datetime         not null
 #
 class Trainee < User
+  has_one :personal_class, dependent: :destroy
+  has_one :personal_trainer, through: :personal_class, source: :trainer
+
+  def personal_class?
+    !personal_class.nil?
+  end
 end

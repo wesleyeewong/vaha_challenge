@@ -21,4 +21,7 @@ class Trainer < User
   }.freeze
 
   enum expertise: EXPERTISE
+
+  has_many :personal_classes, dependent: :destroy
+  has_many :trainees, through: :personal_classes
 end
