@@ -23,7 +23,7 @@
 #  workout_id   (workout_id => workouts.id)
 #
 FactoryBot.define do
-  factory :workout_exercise, class: "Workout::Exercise" do
+  factory :workout_exercise, class: "WorkoutExercise" do
     workout { create(:workout) }
     exercise { create(:exercise) }
     order { 1 }

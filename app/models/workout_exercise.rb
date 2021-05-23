@@ -24,5 +24,5 @@
 #
 class WorkoutExercise < ApplicationRecord
   belongs_to :workout
-  belongs_to :exercise, class_name: "Exercise", foreign_key: "exercise_id"
+  belongs_to :exercise, class_name: "Exercise"
 end

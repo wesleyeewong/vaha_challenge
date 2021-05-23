@@ -29,7 +29,7 @@ ApplicationRecord.transaction do
   dwayne = Trainee.create!(
     first_name: "Dwayne", last_name: "Johnson", email: "dwayne.johnson@therock.man", password: "secret"
   )
-  peter = Trainee.create!(
+  Trainee.create!(
     first_name: "Peter", last_name: "Parker", email: "peter.parker@nyu.edu", password: "secret"
   )
 
@@ -74,7 +74,7 @@ ApplicationRecord.transaction do
       { workout: fitness_workout, exercise: exercises[3], duration: 30, order: 1 }, # 30s squats
       { workout: fitness_workout, exercise: exercises[4], duration: 30, order: 2 }, # 30s step ups
       { workout: fitness_workout, exercise: exercises[3], duration: 45, order: 3 }, # 45s squats
-      { workout: fitness_workout, exercise: exercises[4], duration: 45, order: 4 }, # 45s step ups
+      { workout: fitness_workout, exercise: exercises[4], duration: 45, order: 4 } # 45s step ups
     ]
   )
 end

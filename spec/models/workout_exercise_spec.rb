@@ -24,7 +24,7 @@
 #
 require "rails_helper"
 
-RSpec.describe Workout::Exercise, type: :model do
+RSpec.describe WorkoutExercise, type: :model do
   describe "validations:" do
     it "has valid factory" do
       expect(build(:workout_exercise)).to be_valid
