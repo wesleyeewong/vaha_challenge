@@ -24,4 +24,10 @@ class Trainer < User
 
   has_many :personal_classes, dependent: :destroy
   has_many :trainees, through: :personal_classes
+  has_many :workouts
+
+  # define scopes for the different workout states
+  Workout::STATES.each_key do |state|
+    has_many :"#{state}_workouts", -> { where(state: state) }, class_name: "Workout"
+  end
 end
