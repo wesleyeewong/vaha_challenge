@@ -19,7 +19,7 @@ class Workout < ApplicationRecord
 
   STATES = {
     draft: 1,
-    pubilshed: 2
+    published: 2
   }.freeze
 
   enum state: STATES, _suffix: true

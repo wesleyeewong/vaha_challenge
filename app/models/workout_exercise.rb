@@ -22,9 +22,7 @@
 #  exercise_id  (exercise_id => exercises.id)
 #  workout_id   (workout_id => workouts.id)
 #
-class Workout::Exercise < ApplicationRecord
-  self.table_name = "workout_exercises"
-
+class WorkoutExercise < ApplicationRecord
   belongs_to :workout
-  belongs_to :exercise, class_name: "Exercise"
+  belongs_to :exercise, class_name: "Exercise", foreign_key: "exercise_id"
 end
