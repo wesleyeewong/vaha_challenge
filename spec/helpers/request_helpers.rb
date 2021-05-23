@@ -18,7 +18,7 @@ module RequestHelpers
   end
 
   def json_request_with_token(user, verb, path, params = {}, headers = {})
-    payload = path.contain?("internal") ? { "trainer_id" => user.id } : { "trainee_id" => user.id }
+    payload = path.include?("internal") ? { "trainer_id" => user.id } : { "trainee_id" => user.id }
     token = JWT.encode(payload, nil, "none")
     json_request(verb, path, params, headers.merge("Authorization" => "Bearer #{token}"))
   end

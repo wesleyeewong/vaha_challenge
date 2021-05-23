@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     post "/trainers/login", to: "trainers#login"
 
     resources :trainers, only: [] do
-      resources :trainees, only: %i[index]
+      resources :trainees, only: %i[index show]
     end
   end
 end

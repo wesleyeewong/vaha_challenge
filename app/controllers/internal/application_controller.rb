@@ -33,7 +33,7 @@ class Internal::ApplicationController < ActionController::API
   end
 
   def sign_in
-    @trainee = Trainer.find(trainer_id)
+    @trainer = Trainer.includes(:trainees).find(trainer_id)
   end
 
   def authenticate_user!
