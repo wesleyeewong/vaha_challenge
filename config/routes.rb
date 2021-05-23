@@ -10,4 +10,12 @@ Rails.application.routes.draw do
       resources :personal_classes, only: %i[create destroy]
     end
   end
+
+  scope :internal, module: "internal", defaultls: { format: "json" } do
+    post "/trainers/login", to: "trainers#login"
+
+    resources :trainers, only: [] do
+      resources :trainees, only: %i[index show]
+    end
+  end
 end
