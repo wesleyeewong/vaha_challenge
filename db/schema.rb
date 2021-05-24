@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_23_133731) do
+ActiveRecord::Schema.define(version: 2021_05_24_164307) do
+
+  create_table "assignments", force: :cascade do |t|
+    t.integer "trainer_id", null: false
+    t.integer "trainee_id", null: false
+    t.boolean "completed", default: false
+    t.datetime "completed_at"
+    t.string "assignable_type", null: false
+    t.integer "assignable_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["assignable_type", "assignable_id"], name: "index_assignments_on_assignable"
+    t.index ["trainee_id"], name: "index_assignments_on_trainee_id"
+    t.index ["trainer_id"], name: "index_assignments_on_trainer_id"
+  end
 
   create_table "exercises", force: :cascade do |t|
     t.string "slug", null: false
@@ -67,6 +81,8 @@ ActiveRecord::Schema.define(version: 2021_05_23_133731) do
     t.index ["trainer_id"], name: "index_workouts_on_trainer_id"
   end
 
+  add_foreign_key "assignments", "trainees"
+  add_foreign_key "assignments", "trainers"
   add_foreign_key "personal_classes", "trainees"
   add_foreign_key "personal_classes", "trainers"
   add_foreign_key "workout_exercises", "exercises"

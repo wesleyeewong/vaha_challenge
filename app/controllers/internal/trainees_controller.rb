@@ -18,6 +18,6 @@ class Internal::TraineesController < Internal::ApplicationController
   private
 
   def trainee_id
-    params[:trainee_id]
+    params[:id]
   end
 end
