@@ -5,6 +5,10 @@ class Internal::ApplicationController < ActionController::API
 
   attr_reader :trainer
 
+  rescue_from ActiveRecord::RecordNotFound do
+    head(:not_found)
+  end
+
   protected
 
   def encode(payload)
@@ -33,7 +37,7 @@ class Internal::ApplicationController < ActionController::API
   end
 
   def sign_in
-    @trainer = Trainer.includes(:trainees).find(trainer_id)
+    @trainer = Trainer.includes(:trainees, workouts: [:exercises]).find(trainer_id)
   end
 
   def authenticate_user!

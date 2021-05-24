@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "internal/trainers/:id/trainees" do
+RSpec.describe "internal/trainers/:trainer_id/trainees" do
   let(:trainer) { create(:trainer) }
 
   describe "GET" do
@@ -41,7 +41,7 @@ RSpec.describe "internal/trainers/:id/trainees" do
       end
     end
 
-    describe "/:id" do
+    describe "/:trainee_id" do
       let(:trainer) { create(:trainer) }
       let(:trainee) { create(:personal_class, trainer: trainer).trainee }
       let(:path) { "/internal/trainers/#{trainer.id}/trainees/#{trainee.id}" }

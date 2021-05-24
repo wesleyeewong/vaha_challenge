@@ -13,13 +13,11 @@ class Internal::TraineesController < Internal::ApplicationController
     trainee = V1::TraineePresenter.new(@trainee)
 
     render json: { trainee: trainee.to_h }
-  rescue ActiveRecord::RecordNotFound
-    head(:not_found)
   end
 
   private
 
   def trainee_id
-    params[:id]
+    params[:trainee_id]
   end
 end

@@ -7,12 +7,14 @@ module RequestHelpers
 
   def json_request(verb, path, params = {}, headers = {})
     path = "/#{path}" unless path.start_with?("/")
+    params = params.to_json unless params.is_a?(String)
     send(
       verb,
       path,
       params: params,
       headers: {
-        "CONTENT_TYPE" => "application/json"
+        "CONTENT_TYPE" => "application/json",
+        "HTTP_ACCEPT" => "application/json"
       }.merge(headers)
     )
   end
