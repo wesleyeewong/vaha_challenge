@@ -3,7 +3,7 @@
 class Internal::Assignment::CreateInteractor
   include ActiveModel::Model
 
-  attr_reader :trainer, :trainee, :assignment
+  attr_reader :trainer, :trainee, :assignment, :assignable
 
   validate :assignables
 
@@ -26,7 +26,7 @@ class Internal::Assignment::CreateInteractor
 
   private
 
-  attr_reader :assignable_type, :assignable_id, :assignable
+  attr_reader :assignable_type, :assignable_id
 
   def assignables
     if Assignment::TYPES.include?(assignable_type)
