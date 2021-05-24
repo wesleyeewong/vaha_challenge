@@ -2,8 +2,8 @@
 
 class V1::TrainersController < ApplicationController
   def index
-    @trainers = if index_params.present?
-                  Trainer.where(expertise: index_params[:expertise])
+    @trainers = if expertise_filter.present?
+                  Trainer.where(expertise: expertise_filter[:expertise])
                 else
                   Trainer.all
                 end
@@ -31,7 +31,7 @@ class V1::TrainersController < ApplicationController
     params[:id]
   end
 
-  def index_params
+  def expertise_filter
     params.permit(expertise: [])
   end
 end

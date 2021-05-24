@@ -16,5 +16,11 @@ FactoryBot.define do
     sequence(:slug) { |x| "#{trainer.first_name}_workout_#{x}" }
     trainer { create(:trainer) }
     state { "draft" }
+    workout_exercises { [association(:workout_exercise, workout: instance)] }
+
+    trait :published do
+      state { "published" }
+      workout_exercises { [association(:workout_exercise, workout: instance)] }
+    end
   end
 end

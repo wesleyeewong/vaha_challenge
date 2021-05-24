@@ -14,7 +14,7 @@
 class Workout < ApplicationRecord
   belongs_to :trainer
 
-  has_many :workout_exercises, dependent: :delete_all
+  has_many :workout_exercises, -> { order(:order, :asc) }, inverse_of: :workout, dependent: :delete_all
   has_many :exercises, through: :workout_exercises
 
   STATES = {

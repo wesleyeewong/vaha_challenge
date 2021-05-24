@@ -21,4 +21,16 @@ FactoryBot.define do
     password { "secret" }
     expertise { "yoga" }
   end
+
+  trait :with_published_workout do
+    workouts { [association(:workout, :published, trainer: instance)] }
+  end
+
+  trait :with_draft_workout do
+    workouts { [association(:workout, trainer: instance)] }
+  end
+
+  trait :with_published_and_draft_workout do
+    workouts { [association(:workout, trainer: instance), association(:workout, :published, trainer: instance)] }
+  end
 end

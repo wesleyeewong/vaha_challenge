@@ -6,8 +6,7 @@ RSpec.describe "v1/trainers" do
   let(:trainee) { create(:trainee) }
 
   describe "GET" do
-    let(:do_get) { json_request_with_token(trainee, :get, path, params) }
-    let(:params) { {} }
+    let(:do_get) { json_request_with_token(trainee, :get, path) }
 
     describe "/" do
       let(:path) { "/v1/trainers" }
@@ -49,7 +48,7 @@ RSpec.describe "v1/trainers" do
         end
 
         context "with one filter" do
-          let(:params) { { expertise: ["yoga"] } }
+          let(:path) { "/v1/trainers?expertise[]=yoga" }
 
           it "filters trainers" do
             do_get
@@ -65,7 +64,7 @@ RSpec.describe "v1/trainers" do
         end
 
         context "with multiple filters" do
-          let(:params) { { expertise: %w[yoga strength] } }
+          let(:path) { "/v1/trainers?expertise[]=yoga&expertise[]=strength" }
 
           it "filters trainers" do
             do_get
