@@ -51,6 +51,103 @@ RSpec.describe "v1/trainees/:trainee_id/assignments" do
           expect(json_response["assignments"]).to eq([])
         end
       end
+
+      context "when start date passed in" do
+        let(:start_date) { "01-11-2021" }
+        let(:path) { "/v1/trainees/#{trainee.id}/assignments?start_date=#{start_date}" }
+
+        it "filters based on date" do
+          start = DateTime.parse(start_date)
+
+          # included
+          create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: start)
+
+          # excluded
+          create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: start - 1)
+
+          do_get
+
+          expected = [
+            {
+              "assigned_by" => trainer.full_name,
+              "assignment_type" => "Workout",
+              "completed" => false,
+              "assigned_at" => start.strftime("%d/%m/%Y")
+            }
+          ]
+
+          expect(response).to have_http_status(:ok)
+          expect(json_response["assignments"]).to eq(expected)
+        end
+      end
+
+      context "when end date passed in" do
+        let(:end_date) { "01-11-2021" }
+        let(:path) { "/v1/trainees/#{trainee.id}/assignments?end_date=#{end_date}" }
+
+        it "filters based on date" do
+          parsed_end = DateTime.parse(end_date)
+
+          # included
+          create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: parsed_end)
+
+          # excluded
+          create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: parsed_end + 1)
+
+          do_get
+
+          expected = [
+            {
+              "assigned_by" => trainer.full_name,
+              "assignment_type" => "Workout",
+              "completed" => false,
+              "assigned_at" => parsed_end.strftime("%d/%m/%Y")
+            }
+          ]
+
+          expect(response).to have_http_status(:ok)
+          expect(json_response["assignments"]).to eq(expected)
+        end
+      end
+
+      context "when both start and end date passed in" do
+        let(:start_date) { "01-11-2021" }
+        let(:end_date) { "05-11-2021" }
+        let(:path) { "/v1/trainees/#{trainee.id}/assignments?start_date=#{start_date}&end_date=#{end_date}" }
+
+        it "filters based on date" do
+          parsed_start = DateTime.parse(start_date)
+          parsed_end = DateTime.parse(end_date)
+
+          # included
+          create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: parsed_start)
+          create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: parsed_end)
+
+          # excluded
+          create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: parsed_start - 1)
+          create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: parsed_end + 1)
+
+          do_get
+
+          expected = [
+            {
+              "assigned_by" => trainer.full_name,
+              "assignment_type" => "Workout",
+              "completed" => false,
+              "assigned_at" => parsed_start.strftime("%d/%m/%Y")
+            },
+            {
+              "assigned_by" => trainer.full_name,
+              "assignment_type" => "Workout",
+              "completed" => false,
+              "assigned_at" => parsed_end.strftime("%d/%m/%Y")
+            }
+          ]
+
+          expect(response).to have_http_status(:ok)
+          expect(json_response["assignments"]).to match_array(expected)
+        end
+      end
     end
 
     describe "/:assignment_id" do

@@ -2,7 +2,7 @@
 
 class V1::AssignmentsController < ApplicationController
   def index
-    @assignments = trainee.assignments
+    @assignments = V1::Assignment::IndexInteractor.new(trainee, start_date, end_date).assignments
 
     assignments = V1::AssignmentPresenter.wrap(@assignments)
 
@@ -23,5 +23,13 @@ class V1::AssignmentsController < ApplicationController
 
   def assignment_id
     params[:id]
+  end
+
+  def start_date
+    params[:start_date]
+  end
+
+  def end_date
+    params[:end_date]
   end
 end
