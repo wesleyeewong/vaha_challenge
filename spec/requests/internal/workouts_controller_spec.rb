@@ -221,4 +221,46 @@ RSpec.describe "internal/trainers/:trainer_id/workouts" do
       end
     end
   end
+
+  describe "PUT /:workout_id" do
+    let(:trainer) { create(:trainer, :with_published_workout) }
+    let(:workout) { trainer.workouts.first }
+    let(:path) { "/internal/trainers/#{trainer.id}/workouts/#{workout.id}" }
+    let(:do_put) { json_request_with_token(trainer, :put, path, params) }
+    let(:params) do
+      {
+        workout: {
+          exercises: [
+            { slug: "pushups", duration: 30 },
+            { slug: "pushups", duration: 40 }
+          ],
+          slug: "my_workout",
+          state: "draft"
+        }
+      }
+    end
+
+    it "updates workout and return workout json" do
+      create(:exercise, slug: "pushups")
+
+      expected = {
+        "exercises" => [
+          { "slug" => "pushups", "duration" => 30, "order" => 1 },
+          { "slug" => "pushups", "duration" => 40, "order" => 2 }
+        ],
+        "state" => "draft",
+        "total_duration" => 70
+      }
+
+      expect(trainer.workouts.count).to eq(1)
+
+      expect do
+        do_put
+      end.to change(Workout, :count).by(0).and change(WorkoutExercise, :count).by(1)
+
+      expect(response).to have_http_status(:ok)
+      expect(json_response["workout"]).to eq(expected)
+      expect(trainer.workouts.count).to eq(1)
+    end
+  end
 end

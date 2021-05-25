@@ -190,6 +190,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/workouts"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
         '500':
           description: unprocessabel entity
           
@@ -218,6 +220,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/workouts"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: not found
     delete:
@@ -227,8 +231,50 @@ paths:
       responses:
         '204':
           description: no content
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
         '404':
           description: not found
+    put:
+      tags:
+      - workouts
+      summary: update workout
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                workout:
+                  type: object
+                  properties:
+                    exercises:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          slug:
+                            type: string
+                            description: "Exercise slug"
+                          duration:
+                            type: integer
+                    slug:
+                      type: string
+                    state:
+                      type: string
+                      enum: ["draft", "published"]
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/workouts"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '500':
+          description: unprocessabel entity
 security:
   - bearerAuth: [] 
           
