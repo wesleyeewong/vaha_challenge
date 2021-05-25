@@ -1,0 +1,307 @@
+---
+openapi: 3.0.1
+info:
+  title: API Internal
+  version: v1
+paths:
+  "/internal/trainers/login":
+    post:
+      tags:
+      - login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  first_name:
+                    type: string
+                  last_name:
+                    type: string
+                  email:
+                    type: string
+                  token:
+                    type: string
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+  
+  "/internal/trainers/{trainer_id}/trainees":
+    get:
+      tags:
+      - trainees
+      parameters:
+        - name: trainer_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      summary: list trainees for trainer
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/trainees"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+          
+  "/internal/trainers/{trainer_id}/trainees/{trainee_id}":
+    parameters:
+    - name: trainer_id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    - name: trainee_id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - trainees
+      summary: show trainee
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/trainee"
+        '404':
+          description: Trainee not found
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+          
+  "/internal/trainers/{trainer_id}/trainees/{trainee_id}/assignments":
+    parameters:
+    - name: trainer_id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    - name: trainee_id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    post:
+      tags:
+      - assignments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum: ["Workout"]
+                id:
+                  type: integer
+      summary: create trainee assignments
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/assignment"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '500':
+          description: unprocessable entity
+
+  "/internal/trainers/{trainer_id}/workouts":
+    parameters:
+    - name: trainer_id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - workouts
+      summary: list workouts
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/workouts"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+          
+    post:
+      tags:
+      - workouts
+      summary: create workout
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                workout:
+                  type: object
+                  properties:
+                    exercises:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          slug:
+                            type: string
+                            description: "Exercise slug"
+                          duration:
+                            type: integer
+                    slug:
+                      type: string
+                    state:
+                      type: string
+                      enum: ["draft", "published"]
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/workouts"
+        '500':
+          description: unprocessabel entity
+          
+  "/internal/trainers/{trainer_id}/workouts/{workout_id}":
+    parameters:
+    - name: trainer_id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    - name: workout_id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - workouts
+      summary: show workout
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/workouts"
+        '404':
+          description: not found
+    delete:
+      tags:
+      - workouts
+      summary: delete workout
+      responses:
+        '204':
+          description: no content
+        '404':
+          description: not found
+security:
+  - bearerAuth: [] 
+          
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+      
+  schemas:
+    trainees:
+      type: object
+      properties:
+        trainees:
+          type: array
+          items:
+            $ref: "#/components/schemas/trainee"
+          
+    trainee:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+              
+    assignment:
+      type: object
+      properties:
+        assigned_by:
+          type: string
+        assignment_type:
+          type: string
+          enum: ["Workout"]
+        assignment:
+          type: object
+          oneOf:
+          - $ref: "#/components/schemas/workout"
+    
+    workouts:
+      type: array
+      items:
+        $ref: "#/components/schemas/workout"
+            
+    workout:
+      type: object
+      properties:
+        exercises:
+          type: array
+          items:
+            type: object
+            properties:
+              slug:
+                type: string
+                description: "Exercise slugs"
+              duration:
+                type: integer
+              order:
+                type: integer
+        state:
+          type: string
+          enum: ["draft", "published"]
+        total_duration:
+          type: integer
+  
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com
