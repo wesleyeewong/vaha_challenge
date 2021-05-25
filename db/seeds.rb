@@ -77,4 +77,7 @@ ApplicationRecord.transaction do
       { workout: fitness_workout, exercise: exercises[4], duration: 45, order: 4 } # 45s step ups
     ]
   )
+
+  Assignment.create(trainer: yoga, trainee: wesley, assignable: yoga_workout)
+  Assignment.create(trainer: strength, trainee: ron, assignable: strength_workout)
 end
