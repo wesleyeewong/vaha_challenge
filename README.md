@@ -9,7 +9,7 @@
 
 Run `bin/setup`
 
-### Seet
+### Seed
 
 Run `bin/rails db:seed`
 
