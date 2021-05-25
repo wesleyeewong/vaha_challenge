@@ -41,7 +41,7 @@ token = JWT.encode(payload, nil, "none")
 
 ## Design Patterns
 
-I find that the code is more easily digestable when models, and controllers are not bloated with logic. And that's the reason why I used this two patterns. While not used here, typically I would also abstract out specific complex logics, into a service class.
+I find that the code is more easily digestable when models, and controllers are not bloated with logic. And that's the reason why I used these two patterns. While not used here, typically I would also abstract out specific complex logics, into a service class.
 
 ### Interactors
 
