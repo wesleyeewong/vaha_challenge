@@ -3,7 +3,7 @@
 ### Requirements
 
 * Ruby
-* SQlite
+* SQLite
 
 ### Setup
 
@@ -27,6 +27,10 @@ Swagger doc available at `localhost:3000/api-docs`
 
 
 # Design and Implementation details
+
+I've broken up the features into different PRs, feel free to check the closed PR for how I iteratively implemented each features.
+
+https://github.com/wesleyeewong/vaha_challenge/pulls?q=is%3Apr+is%3Aclosed
 
 App is ran on SQLite for simplicity of setup, no features implemented are database dependent.
 
