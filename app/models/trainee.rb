@@ -15,6 +15,7 @@
 class Trainee < User
   has_one :personal_class, dependent: :destroy
   has_one :personal_trainer, through: :personal_class, source: :trainer
+  has_many :assignments, dependent: :destroy
 
   def personal_class?
     !personal_class.nil?
