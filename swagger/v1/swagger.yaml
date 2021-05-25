@@ -1,0 +1,308 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/v1/trainees/login":
+    post:
+      tags:
+      - login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  first_name:
+                    type: string
+                  last_name:
+                    type: string
+                  email:
+                    type: string
+                  token:
+                    type: string
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+  
+  "/v1/trainers":
+    get:
+      tags:
+      - trainers
+      summary: list trainers
+      parameters:
+      - name: expertise
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum: ["yoga", "strength", "fitness"]
+
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/trainers"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+          
+  "/v1/trainers/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - trainers
+      summary: show trainer
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/trainer"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+          
+  "/v1/trainers/{id}/personal_classes":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: integer
+    post:
+      tags:
+      - trainers
+      summary: create personal class with trainer
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/personal_class"
+                
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+
+  "/v1/trainers/{trainer_id}/personal_classes/{id}":
+    parameters:
+    - name: trainer_id
+      in: path
+      description: trainer id
+      required: true
+      schema:
+        type: integer
+    - name: id
+      in: path
+      description: personal class id
+      required: true
+      schema:
+        type: integer
+    delete:
+      tags:
+      - trainers
+      summary: deletes personal class with trainer
+      responses:
+        '204':
+          description: no content
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+          
+  "/v1/trainees/{trainee_id}/assignments":
+    parameters:
+    - name: trainee_id
+      in: path
+      description: trainer id
+      required: true
+      schema:
+        type: integer
+    - name: start_date
+      in: query
+      required: false
+      schema:
+        type: string
+    - name: end_date
+      in: query
+      required: false
+      schema:
+        type: string
+    get:
+      tags:
+      - assignments
+      summary: list assignments
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/assignments"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+          
+  "/v1/trainees/{trainee_id}/assignments/{id}":
+    parameters:
+    - name: trainee_id
+      in: path
+      description: trainer id
+      required: true
+      schema:
+        type: integer
+    - name: id
+      in: path
+      description: assignment id
+      required: true
+      schema:
+        type: integer
+
+    get:
+      tags:
+      - assignments
+      summary: show assignment
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/workout_assignment"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+          
+security:
+  - bearerAuth: [] 
+          
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+      
+  schemas:
+    trainers:
+      type: object
+      properties:
+        trainers:
+          type: array
+          items:
+            $ref: "#/components/schemas/trainer"
+    trainer:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        expertise:
+          type: string
+          
+    trainee:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          
+    personal_class:
+      type: object
+      properties:
+        personal_class:
+          type: object
+          properties:
+            trainer:
+              type: object
+              $ref: "#/components/schemas/trainer"
+            trainee:
+              type: object
+              $ref: "#/components/schemas/trainee"
+            started_at:
+              type: string
+    
+    assignments:
+      type: array
+      items:
+        type: object
+        properties:
+          assigned_by:
+            type: string
+          assignment_type:
+            type: string
+            enum: ["Workout"]
+          completed:
+            type: boolean
+          assigned_at:
+            type: string
+            
+    workout:
+      type: object
+      properties:
+        exercises:
+          type: array
+          items:
+            type: object
+            properties:
+              slug:
+                type: string
+                description: "Exercise slugs"
+              duration:
+                type: integer
+              order:
+                type: integer
+        total_duration:
+          type: integer
+            
+    workout_assignment:
+      type: array
+      items:
+        type: object
+        properties:
+          assigned_by:
+            type: string
+          assignment_type:
+            type: string
+            enum: ["Workout"]
+          completed:
+            type: boolean
+          assigned_at:
+            type: string
+          assignment:
+            $ref: "#/components/schemas/workout"
+  
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com
