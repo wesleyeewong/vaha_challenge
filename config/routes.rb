@@ -3,7 +3,6 @@
 Rails.application.routes.draw do
   mount Rswag::Ui::Engine => "/api-docs"
   mount Rswag::Api::Engine => "/api-docs"
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   scope :v1, module: "v1", defautls: { format: "json" } do
     post "/trainees/login", to: "trainees#login"
@@ -24,7 +23,7 @@ Rails.application.routes.draw do
       resources :trainees, only: %i[index show] do
         resources :assignments, only: %i[create]
       end
-      resources :workouts, only: %i[index create show destroy], param: :workout_id
+      resources :workouts, only: %i[index create show destroy update], param: :workout_id
     end
   end
 end
