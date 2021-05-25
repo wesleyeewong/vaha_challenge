@@ -9,6 +9,10 @@ Rails.application.routes.draw do
     resources :trainers, only: %i[index show] do
       resources :personal_classes, only: %i[create destroy]
     end
+
+    resources :trainees, only: [] do
+      resources :assignments, only: %i[index show]
+    end
   end
 
   scope :internal, module: "internal", defaultls: { format: "json" } do

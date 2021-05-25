@@ -5,6 +5,10 @@ class ApplicationController < ActionController::API
 
   attr_reader :trainee
 
+  rescue_from ActiveRecord::RecordNotFound do
+    head(:not_found)
+  end
+
   protected
 
   def encode(payload)
