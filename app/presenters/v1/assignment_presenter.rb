@@ -14,7 +14,8 @@ class V1::AssignmentPresenter < Presenter
       assigned_by: trainer.full_name,
       assignment_type: assignable_type,
       completed: completed,
-      assigned_at: assigned_at
+      assigned_at: assigned_at,
+      id: id
     }
 
     hash[:assignment] = assignment.to_h unless assignable.nil?

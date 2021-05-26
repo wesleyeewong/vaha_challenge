@@ -4,7 +4,8 @@ class V1::WorkoutPresenter < Presenter
   def to_h
     {
       exercises: workout_exercises.map(&:to_h),
-      total_duration: total_duration
+      total_duration: total_duration,
+      id: id
     }
   end
 

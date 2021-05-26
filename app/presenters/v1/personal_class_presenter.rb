@@ -5,7 +5,8 @@ class V1::PersonalClassPresenter < Presenter
     {
       trainer: trainer.to_h,
       trainee: trainee.to_h,
-      started_at: started_at
+      started_at: started_at,
+      id: id
     }
   end
 

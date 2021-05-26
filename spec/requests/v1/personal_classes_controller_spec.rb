@@ -16,14 +16,17 @@ RSpec.describe "v1/trainers/:id/personal_classes" do
           "trainer" => {
             "first_name" => trainer.first_name,
             "last_name" => trainer.last_name,
-            "expertise" => trainer.expertise
+            "expertise" => trainer.expertise,
+            "id" => trainer.id
           },
           "trainee" => {
             "first_name" => trainee.first_name,
             "last_name" => trainee.last_name,
-            "email" => trainee.email
+            "email" => trainee.email,
+            "id" => trainee.id
           },
-          "started_at" => time.strftime("%d/%m/%Y")
+          "started_at" => time.strftime("%d/%m/%Y"),
+          "id" => PersonalClass.first.id
         }
       }
     end

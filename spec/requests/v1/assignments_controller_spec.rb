@@ -20,7 +20,8 @@ RSpec.describe "v1/trainees/:trainee_id/assignments" do
       it "returns all assignments without assignment details" do
         time = Time.current
 
-        2.times { create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: time) }
+        assignment1 = create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: time)
+        assignment2 = create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: time)
 
         do_get
 
@@ -29,13 +30,16 @@ RSpec.describe "v1/trainees/:trainee_id/assignments" do
             "assigned_by" => trainer.full_name,
             "assignment_type" => "Workout",
             "completed" => false,
-            "assigned_at" => time.strftime("%d/%m/%Y")
+            "assigned_at" => time.strftime("%d/%m/%Y"),
+            "id" => assignment1.id
+
           },
           {
             "assigned_by" => trainer.full_name,
             "assignment_type" => "Workout",
             "completed" => false,
-            "assigned_at" => time.strftime("%d/%m/%Y")
+            "assigned_at" => time.strftime("%d/%m/%Y"),
+            "id" => assignment2.id
           }
         ]
 
@@ -60,7 +64,7 @@ RSpec.describe "v1/trainees/:trainee_id/assignments" do
           start = DateTime.parse(start_date)
 
           # included
-          create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: start)
+          included = create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: start)
 
           # excluded
           create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: start - 1)
@@ -72,7 +76,8 @@ RSpec.describe "v1/trainees/:trainee_id/assignments" do
               "assigned_by" => trainer.full_name,
               "assignment_type" => "Workout",
               "completed" => false,
-              "assigned_at" => start.strftime("%d/%m/%Y")
+              "assigned_at" => start.strftime("%d/%m/%Y"),
+              "id" => included.id
             }
           ]
 
@@ -89,7 +94,8 @@ RSpec.describe "v1/trainees/:trainee_id/assignments" do
           parsed_end = DateTime.parse(end_date)
 
           # included
-          create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: parsed_end)
+          included =
+            create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: parsed_end)
 
           # excluded
           create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: parsed_end + 1)
@@ -101,7 +107,8 @@ RSpec.describe "v1/trainees/:trainee_id/assignments" do
               "assigned_by" => trainer.full_name,
               "assignment_type" => "Workout",
               "completed" => false,
-              "assigned_at" => parsed_end.strftime("%d/%m/%Y")
+              "assigned_at" => parsed_end.strftime("%d/%m/%Y"),
+              "id" => included.id
             }
           ]
 
@@ -120,8 +127,10 @@ RSpec.describe "v1/trainees/:trainee_id/assignments" do
           parsed_end = DateTime.parse(end_date)
 
           # included
-          create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: parsed_start)
-          create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: parsed_end)
+          included1 = 
+            create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: parsed_start)
+          included2 =
+            create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: parsed_end)
 
           # excluded
           create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: parsed_start - 1)
@@ -134,13 +143,15 @@ RSpec.describe "v1/trainees/:trainee_id/assignments" do
               "assigned_by" => trainer.full_name,
               "assignment_type" => "Workout",
               "completed" => false,
-              "assigned_at" => parsed_start.strftime("%d/%m/%Y")
+              "assigned_at" => parsed_start.strftime("%d/%m/%Y"),
+              "id" => included1.id
             },
             {
               "assigned_by" => trainer.full_name,
               "assignment_type" => "Workout",
               "completed" => false,
-              "assigned_at" => parsed_end.strftime("%d/%m/%Y")
+              "assigned_at" => parsed_end.strftime("%d/%m/%Y"),
+              "id" => included2.id
             }
           ]
 
@@ -164,9 +175,11 @@ RSpec.describe "v1/trainees/:trainee_id/assignments" do
           "assignment_type" => "Workout",
           "completed" => false,
           "assigned_at" => assignment.created_at.strftime("%d/%m/%Y"),
+          "id" => assignment.id,
           "assignment" => {
             "exercises" => [{ "slug" => "squats", "duration" => 60, "order" => 1 }],
-            "total_duration" => 60
+            "total_duration" => 60,
+            "id" => workout.id
           }
         }
 

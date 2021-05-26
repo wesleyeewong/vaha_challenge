@@ -24,11 +24,12 @@ RSpec.describe "v1/trainers" do
         it "returns trainers" do
           2.times { create(:trainer) }
 
-          expected = Array.new(2).map do
+          expected = Trainer.all.map do |trainer|
             {
-              "first_name" => "Nama",
-              "last_name" => "Ste",
-              "expertise" => "yoga"
+              "first_name" => trainer.first_name,
+              "last_name" => trainer.last_name,
+              "expertise" => trainer.expertise,
+              "id" => trainer.id
             }
           end
 
@@ -53,8 +54,9 @@ RSpec.describe "v1/trainers" do
           it "filters trainers" do
             do_get
 
+            trainer = Trainer.find_by(expertise: "yoga")
             expected = [
-              { "first_name" => "Nama", "last_name" => "Ste", "expertise" => "yoga" }
+              { "first_name" => "Nama", "last_name" => "Ste", "expertise" => "yoga", "id" => trainer.id }
             ]
 
             expect(response).to have_http_status(:ok)
@@ -69,9 +71,11 @@ RSpec.describe "v1/trainers" do
           it "filters trainers" do
             do_get
 
+            yoga = Trainer.find_by(expertise: "yoga")
+            strength = Trainer.find_by(expertise: "strength")
             expected = [
-              { "first_name" => "Nama", "last_name" => "Ste", "expertise" => "yoga" },
-              { "first_name" => "Nama", "last_name" => "Ste", "expertise" => "strength" }
+              { "first_name" => "Nama", "last_name" => "Ste", "expertise" => "yoga", "id" => yoga.id },
+              { "first_name" => "Nama", "last_name" => "Ste", "expertise" => "strength", "id" => strength.id }
             ]
 
             expect(response).to have_http_status(:ok)
@@ -89,7 +93,7 @@ RSpec.describe "v1/trainers" do
       it "returns trainer json" do
         do_get
 
-        expected = { "first_name" => "Nama", "last_name" => "Ste", "expertise" => "yoga" }
+        expected = { "first_name" => "Nama", "last_name" => "Ste", "expertise" => "yoga", "id" => trainer.id }
 
         expect(response).to have_http_status(:ok)
         expect(json_response["trainer"]).to eq(expected)

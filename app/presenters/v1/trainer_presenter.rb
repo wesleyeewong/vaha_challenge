@@ -5,7 +5,8 @@ class V1::TrainerPresenter < Presenter
     {
       first_name: first_name,
       last_name: last_name,
-      expertise: expertise
+      expertise: expertise,
+      id: id
     }
   end
 end

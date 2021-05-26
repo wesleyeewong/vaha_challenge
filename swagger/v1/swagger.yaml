@@ -225,6 +225,8 @@ components:
           type: string
         expertise:
           type: string
+        id:
+          type: integer
           
     trainee:
       type: object
@@ -235,6 +237,8 @@ components:
           type: string
         email:
           type: string
+        id:
+          type: integer
           
     personal_class:
       type: object
@@ -250,6 +254,8 @@ components:
               $ref: "#/components/schemas/trainee"
             started_at:
               type: string
+            id:
+              type: integer
     
     assignments:
       type: array
@@ -283,6 +289,8 @@ components:
                 type: integer
         total_duration:
           type: integer
+        id:
+          type: integer
             
     workout_assignment:
       type: array
@@ -300,6 +308,8 @@ components:
             type: string
           assignment:
             $ref: "#/components/schemas/workout"
+          id:
+            type: integer
   
 servers:
 - url: https://{defaultHost}
