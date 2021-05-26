@@ -19,21 +19,23 @@ RSpec.describe "internal/trainers/:trainer_id/trainees/:trainee_id/assignments" 
     end
 
     it "creates and return assignment json" do
-      expected = {
-        "assigned_by" => trainer.full_name,
-        "assignment_type" => assignment_type,
-        "assignment" => {
-          "exercises" => [{ "slug" => "squats", "duration" => 60, "order" => 1 }],
-          "state" => "published",
-          "total_duration" => 60
-        }
-      }
-
       expect(trainee.assignments.count).to eq(0)
 
       expect do
         do_post
       end.to change(Assignment, :count).by(1)
+
+      expected = {
+        "assigned_by" => trainer.full_name,
+        "assignment_type" => assignment_type,
+        "id" => Assignment.first.id,
+        "assignment" => {
+          "exercises" => [{ "slug" => "squats", "duration" => 60, "order" => 1 }],
+          "state" => "published",
+          "total_duration" => 60,
+          "id" => Workout.first.id
+        }
+      }
 
       expect(response).to have_http_status(:created)
       expect(json_response).to eq(expected)

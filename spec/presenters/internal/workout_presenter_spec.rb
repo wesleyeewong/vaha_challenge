@@ -18,7 +18,8 @@ RSpec.describe Internal::WorkoutPresenter do
           { slug: "pushups", order: 2, duration: 15 }
         ],
         total_duration: 40,
-        state: "draft"
+        state: "draft",
+        id: workout.id
       }
 
       expect(described_class.new(workout.reload).to_h).to eq(expected)

@@ -7,7 +7,8 @@ class Internal::TrainerPresenter < Presenter
       last_name: last_name,
       email: email,
       expertise: expertise,
-      trainees: trainees.map(&:to_h)
+      trainees: trainees.map(&:to_h),
+      id: id
     }
   end
 

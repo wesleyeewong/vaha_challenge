@@ -22,15 +22,23 @@ RSpec.describe "internal/trainers/:trainer_id/trainees" do
 
       context "when there are trainees enrolled to trainer" do
         it "returns trainees" do
-          2.times { create(:personal_class, trainer: trainer) }
+          class1 =  create(:personal_class, trainer: trainer)
+          class2 =  create(:personal_class, trainer: trainer)
 
-          expected = Trainee.all.map do |trainee|
+          expected = [
             {
-              "first_name" => trainee.first_name,
-              "last_name" => trainee.last_name,
-              "email" => trainee.email
+              "first_name" => class1.trainee.first_name,
+              "last_name" => class1.trainee.last_name,
+              "email" => class1.trainee.email,
+              "id" => class1.trainee.id
+            },
+            {
+              "first_name" => class2.trainee.first_name,
+              "last_name" => class2.trainee.last_name,
+              "email" => class2.trainee.email,
+              "id" => class2.trainee.id
             }
-          end
+          ]
 
           do_get
 
@@ -49,7 +57,7 @@ RSpec.describe "internal/trainers/:trainer_id/trainees" do
       it "returns trainee json" do
         do_get
 
-        expected = { "first_name" => "Elvis", "last_name" => "Presley", "email" => trainee.email }
+        expected = { "first_name" => "Elvis", "last_name" => "Presley", "email" => trainee.email, "id" => trainee.id }
 
         expect(response).to have_http_status(:ok)
         expect(json_response["trainee"]).to eq(expected)

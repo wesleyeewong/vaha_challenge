@@ -13,7 +13,8 @@ class Internal::AssignmentPresenter < Presenter
     {
       assigned_by: trainer.full_name,
       assignment_type: assignable_type,
-      assignment: assignment.to_h
+      assignment: assignment.to_h,
+      id: id
     }
   end
 

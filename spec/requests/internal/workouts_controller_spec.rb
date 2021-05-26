@@ -24,22 +24,23 @@ RSpec.describe "internal/trainers/:trainer_id/workouts" do
     it "creates workout and return workout json" do
       create(:exercise, slug: "pushups")
 
-      expected = {
-        "exercises" => [
-          { "slug" => "pushups", "duration" => 30, "order" => 1 },
-          { "slug" => "pushups", "duration" => 40, "order" => 2 }
-        ],
-        "state" => "draft",
-        "total_duration" => 70
-      }
-
       expect(trainer.workouts.count).to eq(0)
 
       expect do
         do_post
       end.to change(Workout, :count).by(1).and change(WorkoutExercise, :count).by(2)
 
-      expect(response).to have_http_status(:created)
+       expected = {
+        "exercises" => [
+          { "slug" => "pushups", "duration" => 30, "order" => 1 },
+          { "slug" => "pushups", "duration" => 40, "order" => 2 }
+        ],
+        "state" => "draft",
+        "total_duration" => 70,
+        "id" => Workout.first.id
+      }
+
+     expect(response).to have_http_status(:created)
       expect(json_response["workout"]).to eq(expected)
       expect(trainer.workouts.count).to eq(1)
     end
@@ -129,7 +130,8 @@ RSpec.describe "internal/trainers/:trainer_id/workouts" do
             {
               "exercises" => [{ "slug" => "squats", "order" => 1, "duration" => 60 }],
               "total_duration" => 60,
-              "state" => "published"
+              "state" => "published",
+              "id" => trainer.workouts.first.id
             }
           ]
 
@@ -148,7 +150,8 @@ RSpec.describe "internal/trainers/:trainer_id/workouts" do
             {
               "exercises" => [{ "slug" => "squats", "order" => 1, "duration" => 60 }],
               "total_duration" => 60,
-              "state" => "draft"
+              "state" => "draft",
+              "id" => trainer.workouts.first.id
             }
           ]
 
@@ -167,12 +170,14 @@ RSpec.describe "internal/trainers/:trainer_id/workouts" do
             {
               "exercises" => [{ "slug" => "squats", "order" => 1, "duration" => 60 }],
               "total_duration" => 60,
-              "state" => "draft"
+              "state" => "draft",
+              "id" => trainer.workouts.find_by(state: "draft").id
             },
             {
               "exercises" => [{ "slug" => "squats", "order" => 1, "duration" => 60 }],
               "total_duration" => 60,
-              "state" => "published"
+              "state" => "published",
+              "id" => trainer.workouts.find_by(state: "published").id
             }
           ]
 
@@ -193,7 +198,8 @@ RSpec.describe "internal/trainers/:trainer_id/workouts" do
         expected = {
           "exercises" => [{ "slug" => "squats", "order" => 1, "duration" => 60 }],
           "total_duration" => 60,
-          "state" => "published"
+          "state" => "published",
+          "id" => workout.id
         }
 
         expect(response).to have_http_status(:ok)
@@ -249,7 +255,8 @@ RSpec.describe "internal/trainers/:trainer_id/workouts" do
           { "slug" => "pushups", "duration" => 40, "order" => 2 }
         ],
         "state" => "draft",
-        "total_duration" => 70
+        "total_duration" => 70,
+        "id" => workout.id
       }
 
       expect(trainer.workouts.count).to eq(1)

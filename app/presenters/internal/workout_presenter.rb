@@ -5,7 +5,8 @@ class Internal::WorkoutPresenter < Presenter
     {
       exercises: workout_exercises.map(&:to_h),
       total_duration: total_duration,
-      state: state
+      state: state,
+      id: id
     }
   end
 
