@@ -127,7 +127,7 @@ RSpec.describe "v1/trainees/:trainee_id/assignments" do
           parsed_end = DateTime.parse(end_date)
 
           # included
-          included1 = 
+          included1 =
             create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: parsed_start)
           included2 =
             create(:assignment, trainer: trainer, trainee: trainee, assignable: workout, created_at: parsed_end)

@@ -30,7 +30,7 @@ RSpec.describe "internal/trainers/:trainer_id/workouts" do
         do_post
       end.to change(Workout, :count).by(1).and change(WorkoutExercise, :count).by(2)
 
-       expected = {
+      expected = {
         "exercises" => [
           { "slug" => "pushups", "duration" => 30, "order" => 1 },
           { "slug" => "pushups", "duration" => 40, "order" => 2 }
@@ -40,7 +40,7 @@ RSpec.describe "internal/trainers/:trainer_id/workouts" do
         "id" => Workout.first.id
       }
 
-     expect(response).to have_http_status(:created)
+      expect(response).to have_http_status(:created)
       expect(json_response["workout"]).to eq(expected)
       expect(trainer.workouts.count).to eq(1)
     end
